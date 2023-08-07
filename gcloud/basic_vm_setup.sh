@@ -1,14 +1,7 @@
 #!/bin/bash
 
 # Setup
-# Create an instance template.
-# Create a target pool.
-# Create a managed instance group.
-# Create a firewall rule named as allow-tcp-rule-966 to allow traffic (80/tcp).
-# Create a health check.
-# Create a backend service, and attach the managed instance group with named port (http:80).
-# Create a URL map, and target the HTTP proxy to route requests to your URL map.
-# Create a forwarding rule.
+# Create vm and have fun.
 
 #Setup
 gcloud config list
@@ -26,3 +19,7 @@ export ZONE=us-east1-b
 
 gcloud config set compute/region "zone=$ZONE"
 gcloud config set compute/region "region=$REGION"
+
+gcloud compute instances create my-vm1 --machine-type e2-medium --zone=$ZONE
+gcloud compute ssh my-vm1 --zone=$ZONE
+
