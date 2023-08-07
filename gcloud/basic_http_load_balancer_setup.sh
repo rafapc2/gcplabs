@@ -42,7 +42,7 @@ gcloud compute instance-templates create my-nginx-template --metadata-from-file 
 
 
 # Create a target pool.
-gcloud compute target-pools create my-nginx-pool
+gcloud compute target-pools create my-nginx-pool --region $REGION
 
 
 # Create a managed instance group. of 2 nginx web servers
@@ -50,7 +50,8 @@ gcloud compute instance-groups managed create my-nginx-group \
 	--base-instance-name nginx \
 	--size 2 \
 	--template my-nginx-template \
-	--target-pool my-nginx-pool
+	--target-pool my-nginx-pool \
+	--zone $ZONE
 
 gcloud compute instances list
 
@@ -72,7 +73,8 @@ gcloud compute http-health-checks create http-basic-check
 
 # Create a backend service, and attach the managed instance group with named port (http:80).
 gcloud compute instance-groups managed set-named-ports my-nginx-group \
-	--named-ports http:80
+	--named-ports http:80 \
+	--zone $ZONE
 
 gcloud compute backend-services create my-nginx-backend \
 	--protocol HTTP \
