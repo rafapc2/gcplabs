@@ -14,7 +14,7 @@
 gcloud config list
 gcloud auth list
 
-export PROJECT_ID=$(gcloud config get-value project
+export PROJECT_ID=$(gcloud config get-value project)
 
 gcloud compute project-info describe --project $PROJECT_ID
 # defaults propperties
@@ -24,5 +24,5 @@ gcloud compute project-info describe --project $PROJECT_ID
 export REGION=us-east1
 export ZONE=us-east1-b
 
-gcloud config set compute/zone $ZONE
-gcloud config set compute/region $REGION
+gcloud config set compute/region "zone=$ZONE"
+gcloud config set compute/region "region=$REGION"
