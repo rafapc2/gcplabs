@@ -65,3 +65,42 @@ gcloud compute forwarding-rules create my-nginx-lb \
 	--target-pool my-nginx-pool
 
 gcloud compute forwarding-rules list
+
+
+# Create a health check.
+gcloud compute http-health-checks create http-basic-check
+
+# Create a backend service, and attach the managed instance group with named port (http:80).
+gcloud compute instance-groups managed set-named-ports my-nginx-group \
+	--named-ports http:80
+
+gcloud compute backend-services create my-nginx-backend \
+	--protocol HTTP \
+	--http-health-checks http-basic-check \
+	--global
+
+gcloud compute backend-services add-backend my-nginx-backend \
+	--instance-group my-nginx-group \
+	--instance-group-zone $ZONE \
+	--global
+
+
+
+
+# Create a URL map, and target the HTTP proxy to route requests to your URL map.
+gcloud compute url-maps create my-web-map-http \
+	--default-service my-nginx-backend
+
+gcloud compute target-http-proxies create my-http-lb-proxy \
+	--url-map  my-web-map-http
+
+
+# Create a forwarding rule.
+gcloud compute forwarding-rules create http-content-rule \
+	--global \
+	--target-http-proxy my-http-lb-proxy \
+	--ports 80
+gcloud compute forwarding-rules list
+
+#check IP at Network services > Load balancing. menu
+
