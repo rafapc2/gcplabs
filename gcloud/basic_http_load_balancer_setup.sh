@@ -14,7 +14,7 @@
 gcloud config list
 gcloud auth list
 
-export PROJECT_ID=$(gcloud config get-value project
+export PROJECT_ID=$(gcloud config get-value project)
 
 gcloud compute project-info describe --project $PROJECT_ID
 # defaults propperties
