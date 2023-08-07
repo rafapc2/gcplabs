@@ -38,5 +38,30 @@ sed -i -- 's/nginx/Google Cloud Platform - '"\$HOSTNAME"'/' /var/www/html/index.
 EOF
 
 # Create an instance template using local startup script
-gcloud compute instance-templates create nginx-template --metadata-from-file startup-script=startup.sh
+gcloud compute instance-templates create my-nginx-template --metadata-from-file startup-script=startup.sh
 
+
+# Create a target pool.
+gcloud compute target-pools create my-nginx-pool
+
+
+# Create a managed instance group. of 2 nginx web servers
+gcloud compute instance-groups managed create my-nginx-group \
+	--base-instance-name nginx \
+	--size 2 \
+	--template my-nginx-template \
+	--target-pool my-nginx-pool
+
+gcloud compute instances list
+
+
+# Create a firewall rule named as allow-tcp-rule-http to allow traffic (80/tcp).
+gcloud compute firewall-rules create allow-tcp-rule-http --allow tcp:80
+
+# create a forwarding rule
+gcloud compute forwarding-rules create my-nginx-lb \
+	--region $REGION \
+	--ports=80 \
+	--target-pool my-nginx-pool
+
+gcloud compute forwarding-rules list
